@@ -1,4 +1,3 @@
-/* video component */
 .video {
     max-width: 400px;
     height: fit-content;
@@ -38,10 +37,4 @@
 .video .qmeta p {
     font-size: 15px;
     font-weight: 400;
-}
-
-@media only screen and (max-width: 600px) {
-    .video {
-        width: 100%;
-    }
 }
