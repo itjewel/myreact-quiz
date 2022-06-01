@@ -1,28 +1,23 @@
 import { Link } from 'react-router-dom';
 import LoginImage from '../../assets/images/login.svg';
+import Button from '../Button';
+import Form from '../Form';
+import TextInput from '../TextInput';
 export default function Login() {
     return (<><h1>Login to your account</h1>
         <div className="column">
             <div className="illustration">
                 <img src={LoginImage} alt="Login" />
             </div>
-            <form className="login form" action="#">
-                <div className="textInput">
-                    <input type="text" placeholder="Enter email" />
-                    <span className="material-icons-outlined"> alternate_email </span>
-                </div>
-
-                <div className="textInput">
-                    <input type="password" placeholder="Enter password" />
-                    <span className="material-icons-outlined"> lock </span>
-                </div>
-
-                <button className="button">
+            <Form className="login form" action="#">
+                <TextInput icon="alternate_email" type="text" placeholder="Enter email" />
+                <TextInput icon="lock" type="password" placeholder="Enter password" />
+                <Button>
                     <span>Submit now</span>
-                </button>
+                </Button>
 
                 <div className="info">Don't have an account?
                     <Link to="/signup">Signup</Link> instead.</div>
-            </form>
+            </Form>
         </div></>);
 }

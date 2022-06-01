@@ -1,6 +1,6 @@
 import imageURL from '../assets/images/3.jpg';
-import classes from '../styles/Player.module.css';
-export default function Player() {
+import classes from '../styles/MiniPlayer.module.css';
+export default function MiniPlayer() {
     return (
         <>
             <div className={`${classes.miniPlayer}  ${classes.floatingBtn}`}>

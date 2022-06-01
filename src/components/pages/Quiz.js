@@ -1,5 +1,5 @@
 import classes from '../../styles/Quiz.module.css';
-import Player from '../Player';
+import MiniPlayer from '../MiniPlayer';
 import ProgressBar from '../ProgressBar';
 export default function Quiz() {
     return (
@@ -15,7 +15,7 @@ export default function Quiz() {
             </div>
             <ProgressBar />
 
-            <Player />
+            <MiniPlayer />
         </>
     );
 }
