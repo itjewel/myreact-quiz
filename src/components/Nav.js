@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/images/logo-bg.png";
+import { useAuth } from '../contexts/AuthContext';
+import Account from "./Account";
 export default function Nav() {
+  const { currentUser, logout } = useAuth();
+  // console.log(currentUser)
   return (<nav className="nav">
     <ul>
       <li>
@@ -10,12 +14,6 @@ export default function Nav() {
         </Link>
       </li>
     </ul>
-    <div className="account">
-      <span className="material-icons-outlined" title="Account">
-        account_circle
-      </span>
-      <Link to="/signup">Signup</Link>
-      {/* <!-- <span className="material-icons-outlined" title="Logout"> logout </span> --> */}
-    </div>
+    <Account />
   </nav>);
 }
