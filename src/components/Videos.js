@@ -4,15 +4,19 @@ import useVideoList from "../hooks/useVideoList";
 import classes from '../styles/videos.module.css';
 
 export default function Videos() {
-    const { videos, loading, error } = useVideoList();
-    // console.log(videos)
+    const { videosList, loading, error } = useVideoList();
     return (
         <div className={classes.videos}>
-
-            <Link to="/quiz">
-                <Video />
-            </Link>
-
+             {videosList.length > 0 && (
+           videosList.map((value,index)=> value.noq > 0 ? (
+                <Link key={index} to="/quiz">
+                    <Video title={value.title} id={value.youtubeID} noq={value.noq} />
+                </Link>
+                ) : (
+                    <Video  title={value.title} id={value.youtubeID} noq={value.noq}  key={index}/>
+                )
+                )
+            )}
         </div>
     );
 }
