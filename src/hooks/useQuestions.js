@@ -1,37 +1,34 @@
-import { get, getDatabase, limitToFirst, orderByKey, query, ref, startAt } from "firebase/database";
+import { get, getDatabase, orderByKey, query, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 
 
-export default function useVideoList(page) {
+export default function useQuestions(videoId) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const [hasMore, setHasMore] = useState(true);
-    const [videosList, setVideosList] = useState("");
+    const [questionList, setQuestionList] = useState([]);
     useEffect(() => {
         let isCanceled = false;
-        const fetchVideos = async () => {
+        const fetchQuestions = async () => {
             // database related works
             const db = getDatabase();
 
-            const videRef = ref(db, "videos");
-            const videoQuery = query(videRef, orderByKey(), startAt("" + page), limitToFirst(8));
+            const questionsRef = ref(db, "quiz/" + videoId + "/questions");
+            const questionsQuery = query(questionsRef, orderByKey());
             try {
                 setLoading(true);
                 setError(false);
                 // request firebase database
 
-                const snapshot = await get(videoQuery);
+                const snapshot = await get(questionsQuery);
                 // console.log(snapshot.val())
                 setLoading(false);
                 if (snapshot.exists()) {
                     if (!isCanceled) {
-                        setVideosList((prevVideos) => {
-                            return [...prevVideos, ...Object.values(snapshot.val())]
+                        setQuestionList((prevQuestons) => {
+                            return [...prevQuestons, ...Object.values(snapshot.val())]
 
                         });
                     }
-                } else {
-                    setHasMore(false);
                 }
 
             } catch (error) {
@@ -41,19 +38,18 @@ export default function useVideoList(page) {
             }
         }
         setTimeout(() => {
-            fetchVideos();
+            fetchQuestions();
         }, 2000)
         return () => {
             isCanceled = true;
         }
 
-    }, [page]);
+    }, [videoId]);
 
     return {
         loading,
         error,
-        videosList,
-        hasMore,
+        questionList
     };
 
 }

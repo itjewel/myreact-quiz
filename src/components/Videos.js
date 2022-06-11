@@ -9,16 +9,16 @@ export default function Videos() {
     const { videosList, loading, error, hasMore } = useVideoList(page);
     return (
         <div>
-            {console.log(videosList)}
+            {/* {console.log(videosList)} */}
             {videosList.length > 0 && (
                 <InfiniteScroll dataLength={videosList.length} hasMore={hasMore} next={() => setPage(page + 8)} loader={<h4 style={{ textAlign: 'center !important' }}>Loading...</h4>}>
                     {
                         videosList.map((value, index) => value.noq > 0 ? (
-                            <Link key={index} to="/quiz">
+                            <Link key={value.youtubeID} to={`/quiz/${value.youtubeID}`}>
                                 <Video title={value.title} id={value.youtubeID} noq={value.noq} />
                             </Link>
                         ) : (
-                            <Video title={value.title} id={value.youtubeID} noq={value.noq} key={index} />
+                            <Video title={value.title} id={value.youtubeID} noq={value.noq} key={value.youtubeID} />
                         ))
                     }
 
