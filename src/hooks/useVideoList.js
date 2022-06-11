@@ -1,32 +1,37 @@
-import { get, getDatabase, orderByKey, query, ref } from "firebase/database";
+import { get, getDatabase, limitToFirst, orderByKey, query, ref, startAt } from "firebase/database";
 import { useEffect, useState } from "react";
 
 
-export default function useVideoList() {
+export default function useVideoList(page) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const [videosList, setVideosList] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [videosList, setVideosList] = useState("");
     useEffect(() => {
-        async function fetchVideos() {
+        let isCanceled = false;
+        const fetchVideos = async () => {
             // database related works
             const db = getDatabase();
-           
+
             const videRef = ref(db, "videos");
-            const videoQuery = query(videRef, orderByKey());
+            const videoQuery = query(videRef, orderByKey(), startAt("" + page), limitToFirst(8));
             try {
                 setLoading(true);
                 setLoading(false);
                 // request firebase database
-                
+
                 const snapshot = await get(videoQuery);
                 // console.log(snapshot.val())
                 setLoading(false);
                 if (snapshot.exists()) {
-                    setVideosList((prevVideos) => {
-                        return [...prevVideos, ...Object.values(snapshot.val())];
-                      });
+                    if (!isCanceled) {
+                        setVideosList((prevVideos) => {
+                            return [...prevVideos, ...Object.values(snapshot.val())]
+
+                        });
+                    }
                 } else {
-                //   setHasMore(false);
+                    setHasMore(false);
                 }
 
             } catch (error) {
@@ -35,15 +40,20 @@ export default function useVideoList() {
                 setLoading(true);
             }
         }
-        fetchVideos();
-        // console.log(videosList)
+        setTimeout(() => {
+            fetchVideos();
+        }, 2000)
+        return () => {
+            isCanceled = true;
+        }
 
-    }, []);
+    }, [page]);
 
     return {
         loading,
         error,
-        videosList
-      };
+        videosList,
+        hasMore,
+    };
 
 }
