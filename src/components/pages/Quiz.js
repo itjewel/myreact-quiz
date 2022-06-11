@@ -1,11 +1,14 @@
 
+import { getDatabase, ref, set } from 'firebase/database';
 import _ from 'lodash';
 import { useEffect, useReducer, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import useQuestions from '../../hooks/useQuestions';
 import Answers from '../Answers';
 import MiniPlayer from '../MiniPlayer';
 import ProgressBar from '../ProgressBar';
+
 
 const initialState = null;
 const reducer = (state, action) => {
@@ -30,10 +33,12 @@ const reducer = (state, action) => {
 
 }
 export default function Quiz() {
+    const history = useHistory();
     const { id } = useParams();
     const [currentQueston, setCurrentQueston] = useState(0);
     const { loading, error, questionList } = useQuestions(id);
     const [qna, dispatch] = useReducer(reducer, initialState);
+    const { currentUser } = useAuth();
     useEffect(() => {
         dispatch({
             type: 'questions',
@@ -67,7 +72,20 @@ export default function Quiz() {
     // claculate percentage of progress
     const percentage = questionList.length > 0 ? ((currentQueston + 1) / questionList.length) * 100 : 0;
     const handleSubmit = async () => {
-        console.log("test")
+        const { uid } = currentUser;
+        // console.log(uid);
+        const db = getDatabase();
+        const resultRef = ref(db, `result/${uid}`);
+        await set(resultRef, {
+            [id]: qna
+        })
+        history.push({
+            pathname: `/result/${id}`,
+            state: {
+                qna,
+            }
+
+        })
     }
     return (
         <>
