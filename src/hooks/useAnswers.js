@@ -2,30 +2,30 @@ import { get, getDatabase, orderByKey, query, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 
 
-export default function useQuestions(videoId) {
+export default function useAnswers(videoId) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const [questionList, setQuestionList] = useState([]);
+    const [answersList, setAnswersList] = useState([]);
     useEffect(() => {
         let isCanceled = false;
-        const fetchQuestions = async () => {
+        const fetchAnswers = async () => {
             // database related works
             const db = getDatabase();
 
-            const questionsRef = ref(db, "quiz/" + videoId + "/questions");
-            const questionsQuery = query(questionsRef, orderByKey());
+            const answersRef = ref(db, "answers/" + videoId + "/questions");
+            const answersQuery = query(answersRef, orderByKey());
             try {
                 setLoading(true);
                 setError(false);
                 // request firebase database
 
-                const snapshot = await get(questionsQuery);
+                const snapshot = await get(answersQuery);
                 // console.log(snapshot.val())
                 setLoading(false);
                 if (snapshot.exists()) {
                     if (!isCanceled) {
-                        setQuestionList((prevQuestons) => {
-                            return [...prevQuestons, ...Object.values(snapshot.val())]
+                        setAnswersList((prevAnswers) => {
+                            return [...prevAnswers, ...Object.values(snapshot.val())]
 
                         });
                     }
@@ -38,7 +38,7 @@ export default function useQuestions(videoId) {
             }
         }
         setTimeout(() => {
-            fetchQuestions();
+            fetchAnswers();
         }, 2000)
         return () => {
             isCanceled = true;
@@ -49,7 +49,7 @@ export default function useQuestions(videoId) {
     return {
         loading,
         error,
-        questionList
+        answersList
     };
 
 }
