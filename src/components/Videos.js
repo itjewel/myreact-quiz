@@ -14,7 +14,7 @@ export default function Videos() {
                 <InfiniteScroll dataLength={videosList.length} hasMore={hasMore} next={() => setPage(page + 8)} loader={<h4 style={{ textAlign: 'center !important' }}>Loading...</h4>}>
                     {
                         videosList.map((value, index) => value.noq > 0 ? (
-                            <Link key={value.youtubeID} to={`/quiz/${value.youtubeID}`}>
+                            <Link key={value.youtubeID} to={{ pathname: `/quiz/${value.youtubeID}`, state: { videoTitle: value.title }, }}>
                                 <Video title={value.title} id={value.youtubeID} noq={value.noq} />
                             </Link>
                         ) : (

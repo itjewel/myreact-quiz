@@ -34,6 +34,10 @@ const reducer = (state, action) => {
 }
 export default function Quiz() {
     const history = useHistory();
+    const { location } = history;
+    const { state } = location;
+    const { videoTitle } = state;
+    // console.log(location)
     const { id } = useParams();
     const [currentQueston, setCurrentQueston] = useState(0);
     const { loading, error, questionList } = useQuestions(id);
@@ -97,7 +101,7 @@ export default function Quiz() {
                     <h4>Question can have multiple answers</h4>
                     <Answers input options={qna[currentQueston].options} handleChanged={handleChanged} />
                     <ProgressBar next={nextQuestion} prev={prevQueston} progress={percentage} submit={handleSubmit} />
-                    <MiniPlayer />
+                    <MiniPlayer videId={id} title={videoTitle} />
                 </>
             )}
         </>
